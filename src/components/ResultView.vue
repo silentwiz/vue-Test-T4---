@@ -38,7 +38,7 @@ export default {
           this.isLoading = false
         })
     },
-    showLogin() {
+    goToLogin() {
       this.$emit('show-login')
     },
   },
@@ -51,6 +51,7 @@ export default {
     <button class="submit" @click="executePython" :disabled="isLoading">
       {{ isLoading ? '分析中...' : 'Python スクリプト実行' }}
     </button>
+    <button type="button" class="result-button" @click="goToLogin">戻る</button>
 
     <div v-if="pythonResult && pythonResult.message" class="result-display">
       <p>
@@ -81,6 +82,16 @@ export default {
   max-width: 100%;
   height: auto;
   margin-top: 20px;
+}
+.result-button {
+  background: v-bind(resultColor);
+  margin-top: 0.5em;
+  color: v-bind(whiteFont);
+  font-size: var(--font-size);
+}
+.result-button:hover {
+  background: v-bind(resultHoverColor);
+  font-size: var(--font-size);
 }
 button {
   width: 100%;

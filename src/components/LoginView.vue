@@ -39,6 +39,9 @@ export default {
     goToResults() {
       this.$emit('show-results')
     },
+    goToLogin() {
+      this.$emit('show-login')
+    },
   },
 }
 </script>

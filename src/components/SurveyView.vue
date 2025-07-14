@@ -66,6 +66,9 @@ export default {
     goToResults() {
       this.$emit('show-results')
     },
+    goToLogin() {
+      this.$emit('show-login')
+    },
   },
 }
 </script>
@@ -137,6 +140,7 @@ export default {
       <button type="submit" class="submit">送信</button>
     </form>
     <button type="button" class="result-button" @click="goToResults">結果を見る</button>
+    <button type="button" class="result-button" @click="goToLogin">戻る</button>
   </div>
 </template>
 

@@ -11,17 +11,15 @@ export default {
   },
   data() {
     return {
-      currentView: 'LoginView', // 현재 보여줄 컴포넌트 이름
-      userName: '', // 자식 컴포넌트와 공유할 이름
+      currentView: 'LoginView',
+      userName: '',
     }
   },
   methods: {
-    // 로그인 성공 시 SurveyView로 전환
     handleLogin(name) {
       this.userName = name
       this.currentView = 'SurveyView'
     },
-    // 결과 보기 클릭 시 ResultView로 전환
     showResults() {
       this.currentView = 'ResultView'
     },
