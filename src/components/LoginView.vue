@@ -19,6 +19,7 @@ export default {
       'resultHoverColor',
       'blackFont',
       'whiteFont',
+      'bgColor',
     ]),
   },
   methods: {
@@ -104,19 +105,20 @@ export default {
 </template>
 
 <style scoped>
-/* 스타일은 변경 없습니다 */
 .login-container {
-  max-width: 400px;
+  display: flexbox;
+  max-width: 50em;
   margin: 40px auto;
   padding: 32px 24px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
 }
+
 .font-button-group {
   display: flex;
   gap: 0.4em;
-  margin-top: 3em;
+  margin-top: 2em;
   margin-bottom: 0.3em;
 }
 

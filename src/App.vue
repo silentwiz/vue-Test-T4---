@@ -3,6 +3,9 @@ import LoginView from './components/LoginView.vue'
 import SurveyView from './components/SurveyView.vue'
 import ResultView from './components/ResultView.vue'
 
+import { mapState } from 'pinia'
+import { useSettingsStore } from '@/stores/settingsStore'
+
 export default {
   components: {
     LoginView,
@@ -15,6 +18,18 @@ export default {
       userName: '',
     }
   },
+  computed: {
+    ...mapState(useSettingsStore, ['bgColor']),
+  },
+  mounted() {
+    document.body.style.backgroundColor = this.bgColor
+  },
+  watch: {
+    bgColor(newColor) {
+      document.body.style.backgroundColor = newColor
+    },
+  },
+
   methods: {
     handleLogin(name) {
       this.userName = name
@@ -39,13 +54,15 @@ export default {
       @show-results="showResults"
       @show-login="showLogin"
     ></component>
+
+    <label> {{ bgColor }}</label>
   </div>
 </template>
 
 <style>
-/* 전역 스타일은 여기에 남겨두거나 main.css 파일로 옮길 수 있습니다. */
 body {
-  background-color: #f4f4f4;
+  width: auto;
+  background-color: v-bind(bgColor);
   font-family: 'Microsoft YaHei', Arial, sans-serif;
   display: flex;
   justify-content: center;

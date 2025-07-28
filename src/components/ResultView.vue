@@ -24,6 +24,13 @@ export default {
   mounted() {
     this.executePython()
   },
+
+  watch: {
+    // bgColor 값이 변경될 때마다 이 함수가 실행됩니다.
+    bgColor(newColor) {
+      document.body.style.backgroundColor = newColor
+    },
+  },
   methods: {
     executePython() {
       this.isLoading = true

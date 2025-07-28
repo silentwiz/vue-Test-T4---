@@ -27,20 +27,26 @@ export default {
       form: {
         needSupport: '',
         specificSituation: '',
+        isSocial: '',
+        whoneed: '',
+        precisionOrStrength: '',
+        needInterfaces: '',
         interfaces: [],
         needMaintenance: '',
-        precisionOrStrength: '',
+        whyNeedInterfaces: '',
+        societalNecessity: '',
         otherComments: '',
       },
       interfaceOptions: ['脳波', '筋電', '視線', 'キーボード', 'マウス', 'その他'],
       submitted: false,
+      needInt: false,
     }
   },
   methods: {
     handleSubmit() {
       const dataToSend = {
-        ...this.form,
         userName: this.userName,
+        ...this.form,
       }
 
       fetch('http://localhost:3001/api/submit', {
@@ -52,9 +58,6 @@ export default {
         .then((data) => {
           if (data.success) {
             this.submitted = true
-            setTimeout(() => {
-              this.submitted = false
-            }, 2000)
           } else {
             alert('送信に失敗しました')
           }
@@ -85,12 +88,34 @@ export default {
           <label><input type="radio" v-model="form.needSupport" value="いいえ" /> いいえ</label>
         </div>
       </div>
+      <div v-if="form.needSupport === 'いいえ'" class="form-group">
+        <label>2-2. この技術は社会的意義があると思いますか？</label>
+        <div>
+          <label><input type="radio" v-model="form.isSocial" value="はい" /> はい</label>
+          <label><input type="radio" v-model="form.isSocial" value="いいえ" /> いいえ</label>
+        </div>
+        <div v-if="form.isSocial" class="form-group">
+          <label>3-2. この技術は、どのような人々の助けになると考えますか？</label>
+          <textarea
+            v-model="form.whoneed"
+            :maxlength="100"
+            rows="3"
+            placeholder="例：身体に障がいのある方,高齢者,重度の神経疾患を持つ方（ALSなど）,忙しい生活を送る人（時短目的）,災害支援（がれき撤去）,その他（自由記述）"
+          ></textarea>
+        </div>
+        <div v-if="form.whoneed.length > 0" class="form-group">
+          <label>4. その他ご意見・ご要望（任意記入）</label>
+          <textarea
+            v-model="form.otherComments"
+            rows="2"
+            placeholder="ご意見・ご要望をご記入ください"
+          ></textarea>
+        </div>
+      </div>
 
-      <!-- need support group-->
-      <div v-if="form.needSupport === 'はい'" class="need-support-group">
-        <!-- 2. 具体的にどんな場面か -->
+      <div v-if="form.needSupport === 'はい'" class="form-group">
         <div class="form-group">
-          <label>2. 具体的にどんな場面ですか？（100文字以内）</label>
+          <label>2-1. 具体的にどんな場面ですか？（100文字以内）</label>
           <textarea
             v-model="form.specificSituation"
             :maxlength="100"
@@ -100,19 +125,48 @@ export default {
           <div class="char-count">{{ form.specificSituation.length }}/100</div>
         </div>
 
+        <div v-if="form.specificSituation.length > 0" class="form-group">
+          <!-- 3. どの程度の精密作業又は力仕事 -->
+          <div class="form-group">
+            <label
+              >3.
+              それは、どの程度の精密作業又は力仕事ですか（どのような作業をさせたいですか）</label
+            >
+            <input
+              type="text"
+              v-model="form.precisionOrStrength"
+              placeholder="例：細かい部品の組み立てなど精密な作業が必要"
+            />
+          </div>
+        </div>
+
+        <div v-if="form.precisionOrStrength.length > 0" class="form-group">
+          <div>
+            <label>4.手を使わずに操作するインターフェースは必要だと思うか）</label>
+            <label><input type="radio" v-model="form.needInterfaces" value="はい" /> はい</label>
+            <label
+              ><input type="radio" v-model="form.needInterfaces" value="いいえ" /> いいえ</label
+            >
+          </div>
+        </div>
+
         <!-- 3. どの様なインターフェースが良いか -->
-        <div class="form-group">
-          <label>3. どの様なインターフェースが良いと思いますか？（複数選択可）</label>
+        <div v-if="form.needInterfaces === 'はい'" class="form-group">
+          <label>5-1. どの様なインターフェースが良いと思いますか？（複数選択可）</label>
           <div>
             <label v-for="option in interfaceOptions" :key="option">
-              <input type="checkbox" :value="option" v-model="form.interfaces" /> {{ option }}
+              <input type="checkbox" :value="option" v-model="form.interfaces" />
+              {{ option }}
             </label>
           </div>
         </div>
 
         <!-- 4. メンテナンスサポートは必要か -->
-        <div class="form-group">
-          <label>4. メンテナンスサポートは必要ですか？</label>
+        <div
+          v-if="form.needInterfaces === 'いいえ' || form.interfaces.length > 0"
+          class="form-group"
+        >
+          <label>5-2. メンテナンスサポートは必要ですか？</label>
           <div>
             <label><input type="radio" v-model="form.needMaintenance" value="はい" /> はい</label>
             <label
@@ -121,18 +175,6 @@ export default {
           </div>
         </div>
 
-        <!-- need-needmaintenance-group -->
-        <div v-if="form.needMaintenance === 'はい'" class="need-needmaintenance-group">
-          <!-- 5. どの程度の精密作業又は力仕事 -->
-          <div class="form-group">
-            <label>5. どの程度の精密作業または力仕事が必要ですか？（任意記入）</label>
-            <input
-              type="text"
-              v-model="form.precisionOrStrength"
-              placeholder="例：細かい部品の組み立てなど精密な作業が必要"
-            />
-          </div>
-        </div>
         <!-- 6. アンケート項目 -->
         <div v-if="form.needMaintenance" class="form-group">
           <label>6. その他ご意見・ご要望（任意記入）</label>
@@ -143,10 +185,16 @@ export default {
           ></textarea>
         </div>
       </div>
-      <div v-if="submitted" class="success-message">ご回答ありがとうございました！</div>
-      <button type="submit" class="submit">送信</button>
+      <button
+        v-if="form.otherComments.length > 0 && submitted === false"
+        type="submit"
+        class="submit"
+      >
+        送信
+      </button>
     </form>
-    <button type="button" class="result-button" @click="goToLogin">戻る</button>
+    <div v-if="submitted" class="success-message">ご回答ありがとうございました！</div>
+    <button v-if="submitted" type="button" class="result-button" @click="goToLogin">戻る</button>
   </div>
 </template>
 

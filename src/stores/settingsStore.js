@@ -11,6 +11,7 @@ export const useSettingsStore = defineStore('settings', {
     blackFont: '#000000',
     whiteFont: '#fff',
     data: '',
+    bgColor: '#ffffff',
   }),
 
   // actions:
@@ -32,12 +33,14 @@ export const useSettingsStore = defineStore('settings', {
         this.buttonHoverColor = '#7a7a7a'
         this.resultColor = '#777777ff'
         this.resultHoverColor = '#131313ff'
+        this.bgColor = '#777777ff'
       } else {
         // default mode
         this.buttonColor = '#42b983'
         this.buttonHoverColor = '#369870'
         this.resultColor = '#5c6ac4'
         this.resultHoverColor = '#4a55a0'
+        this.bgColor = '#ffffff'
       }
     },
     setData(data) {
