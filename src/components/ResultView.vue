@@ -6,7 +6,7 @@ export default {
   data() {
     return {
       pythonResult: null,
-      isLoading: false,
+      isLoading: true,
     }
   },
   computed: {
@@ -18,7 +18,11 @@ export default {
       'resultHoverColor',
       'blackFont',
       'whiteFont',
+      'data',
     ]),
+  },
+  mounted() {
+    this.executePython()
   },
   methods: {
     executePython() {
@@ -48,9 +52,6 @@ export default {
 <template>
   <div class="result-container">
     <h2>分析結果</h2>
-    <button class="submit" @click="executePython" :disabled="isLoading">
-      {{ isLoading ? '分析中...' : 'Python スクリプト実行' }}
-    </button>
     <button type="button" class="result-button" @click="goToLogin">戻る</button>
 
     <div v-if="pythonResult && pythonResult.message" class="result-display">
@@ -58,7 +59,6 @@ export default {
         <b>結果:</b><br />
         python status : {{ pythonResult.message }} <br />
         Time: {{ pythonResult.nowTime }} <br />
-        Random Number: {{ pythonResult.randomNumber }}
       </p>
 
       <div v-if="pythonResult.plotImage" class="plot-image">

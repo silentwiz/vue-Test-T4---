@@ -27,7 +27,26 @@ export default {
       'decreaseFontSize',
       'resetFontSize',
       'setTheme',
+      'setData',
     ]),
+
+    executePython() {
+      this.isLoading = true
+      this.pythonResult = null
+
+      fetch('http://localhost:3001/run-python-file')
+        .then((response) => response.json())
+        .then((data) => {
+          this.pythonResult = data
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+          this.pythonResult = { message: 'Error fetching results.' }
+        })
+        .finally(() => {
+          this.isLoading = false
+        })
+    },
 
     submitName() {
       if (this.name.trim()) {
@@ -41,6 +60,9 @@ export default {
     },
     goToLogin() {
       this.$emit('show-login')
+    },
+    dataSetter(_data) {
+      this.data = _data
     },
   },
 }
@@ -58,14 +80,20 @@ export default {
       />
       <br />
       <button type="button" class="submit" @click="submitName">アンケート開始</button>
-      <button type="button" class="result-button" @click="goToResults">結果を見る</button>
+      <button
+        type="button"
+        class="result-button"
+        @click="(executePython(setData(data)), goToResults())"
+      >
+        結果を見る
+      </button>
       <br />
       <div class="font-button-group">
         <button type="button" class="font-size-changer" @click="increaseFontSize">大きく</button>
         <button type="button" class="font-size-changer" @click="decreaseFontSize">小さく</button>
         <button type="button" class="font-size-changer" @click="resetFontSize">初期化</button>
       </div>
-      <label>文字の大きさ : {{ fontSize }}</label>
+      <label :style="{ 'font-size': fontSize - 3 + 'px' }">文字の大きさ : {{ fontSize }}</label>
       <div class="font-button-group" :style="({ gap: 2 + 'em' }, { 'margin-top': 1 + 'em' })">
         <button type="button" class="color-changer" @click="setTheme('light')">色モード</button>
         <button type="button" class="bwcolor-changer" @click="setTheme('dark')">白黒モード</button>
@@ -87,8 +115,8 @@ export default {
 }
 .font-button-group {
   display: flex;
-  gap: 0.5em;
-  margin-top: 0.5em;
+  gap: 0.4em;
+  margin-top: 3em;
   margin-bottom: 0.3em;
 }
 

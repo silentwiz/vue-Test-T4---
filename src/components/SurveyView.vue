@@ -86,65 +86,75 @@ export default {
         </div>
       </div>
 
-      <!-- 2. 具体的にどんな場面か -->
-      <div class="form-group">
-        <label>2. 具体的にどんな場面ですか？（100文字以内）</label>
-        <textarea
-          v-model="form.specificSituation"
-          :maxlength="100"
-          rows="3"
-          placeholder="例：長時間のデスクワークで手が疲れやすく、サポート機器があれば助かると感じた。"
-        ></textarea>
-        <div class="char-count">{{ form.specificSituation.length }}/100</div>
-      </div>
-
-      <!-- 3. どの様なインターフェースが良いか -->
-      <div class="form-group">
-        <label>3. どの様なインターフェースが良いと思いますか？（複数選択可）</label>
-        <div>
-          <label v-for="option in interfaceOptions" :key="option">
-            <input type="checkbox" :value="option" v-model="form.interfaces" /> {{ option }}
-          </label>
+      <!-- need support group-->
+      <div v-if="form.needSupport === 'はい'" class="need-support-group">
+        <!-- 2. 具体的にどんな場面か -->
+        <div class="form-group">
+          <label>2. 具体的にどんな場面ですか？（100文字以内）</label>
+          <textarea
+            v-model="form.specificSituation"
+            :maxlength="100"
+            rows="3"
+            placeholder="例：長時間のデスクワークで手が疲れやすく、サポート機器があれば助かると感じた。"
+          ></textarea>
+          <div class="char-count">{{ form.specificSituation.length }}/100</div>
         </div>
-      </div>
 
-      <!-- 4. メンテナンスサポートは必要か -->
-      <div class="form-group">
-        <label>4. メンテナンスサポートは必要ですか？</label>
-        <div>
-          <label><input type="radio" v-model="form.needMaintenance" value="はい" /> はい</label>
-          <label><input type="radio" v-model="form.needMaintenance" value="いいえ" /> いいえ</label>
+        <!-- 3. どの様なインターフェースが良いか -->
+        <div class="form-group">
+          <label>3. どの様なインターフェースが良いと思いますか？（複数選択可）</label>
+          <div>
+            <label v-for="option in interfaceOptions" :key="option">
+              <input type="checkbox" :value="option" v-model="form.interfaces" /> {{ option }}
+            </label>
+          </div>
         </div>
-      </div>
 
-      <!-- 5. どの程度の精密作業又は力仕事 -->
-      <div class="form-group">
-        <label>5. どの程度の精密作業または力仕事が必要ですか？（任意記入）</label>
-        <input
-          type="text"
-          v-model="form.precisionOrStrength"
-          placeholder="例：細かい部品の組み立てなど精密な作業が必要"
-        />
-      </div>
+        <!-- 4. メンテナンスサポートは必要か -->
+        <div class="form-group">
+          <label>4. メンテナンスサポートは必要ですか？</label>
+          <div>
+            <label><input type="radio" v-model="form.needMaintenance" value="はい" /> はい</label>
+            <label
+              ><input type="radio" v-model="form.needMaintenance" value="いいえ" /> いいえ</label
+            >
+          </div>
+        </div>
 
-      <!-- 6. アンケート項目 -->
-      <div class="form-group">
-        <label>6. その他ご意見・ご要望（任意記入）</label>
-        <textarea
-          v-model="form.otherComments"
-          rows="2"
-          placeholder="ご意見・ご要望をご記入ください"
-        ></textarea>
+        <!-- need-needmaintenance-group -->
+        <div v-if="form.needMaintenance === 'はい'" class="need-needmaintenance-group">
+          <!-- 5. どの程度の精密作業又は力仕事 -->
+          <div class="form-group">
+            <label>5. どの程度の精密作業または力仕事が必要ですか？（任意記入）</label>
+            <input
+              type="text"
+              v-model="form.precisionOrStrength"
+              placeholder="例：細かい部品の組み立てなど精密な作業が必要"
+            />
+          </div>
+        </div>
+        <!-- 6. アンケート項目 -->
+        <div v-if="form.needMaintenance" class="form-group">
+          <label>6. その他ご意見・ご要望（任意記入）</label>
+          <textarea
+            v-model="form.otherComments"
+            rows="2"
+            placeholder="ご意見・ご要望をご記入ください"
+          ></textarea>
+        </div>
       </div>
       <div v-if="submitted" class="success-message">ご回答ありがとうございました！</div>
       <button type="submit" class="submit">送信</button>
     </form>
-    <button type="button" class="result-button" @click="goToResults">結果を見る</button>
     <button type="button" class="result-button" @click="goToLogin">戻る</button>
   </div>
 </template>
 
 <style scoped>
+.need-needmaintenance-group {
+}
+.need-support-group {
+}
 input[type='text'],
 textarea {
   width: 100%;

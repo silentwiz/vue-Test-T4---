@@ -15,8 +15,13 @@ app.post('/api/submit', (req, res) => {
   const data = req.body
   const filePath = 'answers.csv'
   const fileExists = fs.existsSync(filePath)
+  const headers = Object.keys(data)
   const ws = fs.createWriteStream(filePath, { flags: 'a' })
-  const csvStream = format({ headers: !fileExists })
+  const csvStream = format({
+    headers: !fileExists ? headers : false,
+    rowDelimiter: '\r\n',
+    includeEndRowDelimiter: true,
+  })
 
   csvStream.pipe(ws)
   csvStream.write(data)
@@ -28,7 +33,7 @@ app.post('/api/submit', (req, res) => {
 })
 
 app.get('/run-python-file', (req, res) => {
-  const pythonProcess = spawn('python3', ['plot.py'])
+  const pythonProcess = spawn('python3', ['plot_ver2.py'])
 
   let pythonOutput = ''
 
