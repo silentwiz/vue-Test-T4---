@@ -3,7 +3,7 @@ import { mapState, mapActions } from 'pinia'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 export default {
-  emits: ['login-success'],
+  emits: ['login-success', 'show-results'],
 
   data() {
     return {
@@ -30,24 +30,6 @@ export default {
       'setTheme',
       'setData',
     ]),
-
-    executePython() {
-      this.isLoading = true
-      this.pythonResult = null
-
-      fetch('http://localhost:3001/run-python-file')
-        .then((response) => response.json())
-        .then((data) => {
-          this.pythonResult = data
-        })
-        .catch((error) => {
-          console.error('Error:', error)
-          this.pythonResult = { message: 'Error fetching results.' }
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
-    },
 
     submitName() {
       if (this.name.trim()) {
@@ -84,7 +66,7 @@ export default {
       <button
         type="button"
         class="result-button"
-        @click="(executePython(setData(data)), goToResults())"
+        @click="goToResults"
       >
         結果を見る
       </button>

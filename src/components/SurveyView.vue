@@ -9,7 +9,7 @@ export default {
       required: true,
     },
   },
-  emits: ['show-results'],
+  emits: ['show-results', 'show-login'],
   computed: {
     ...mapState(useSettingsStore, [
       'fontSize',
@@ -193,8 +193,8 @@ export default {
         送信
       </button>
     </form>
-    <div v-if="submitted" class="success-message">ご回答ありがとうございました！</div>
     <button v-if="submitted" type="button" class="result-button" @click="goToLogin">戻る</button>
+    <div v-if="submitted" class="success-message">ご回答ありがとうございました！</div>
   </div>
 </template>
 

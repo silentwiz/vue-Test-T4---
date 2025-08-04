@@ -54,8 +54,6 @@ export default {
       @show-results="showResults"
       @show-login="showLogin"
     ></component>
-
-    <label> {{ bgColor }}</label>
   </div>
 </template>
 

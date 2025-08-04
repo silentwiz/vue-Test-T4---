@@ -1,126 +1,86 @@
-<script>
-import { mapState } from 'pinia'
-import { useSettingsStore } from '@/stores/settingsStore'
+<template>
+  <div class="result-view">
+    <h1>アンケート結果</h1>
+    <button @click="fetchGraph">グラフ再生成</button>
+    <div v-if="loading" class="loading-message">作成中。。。</div>
+    <div v-if="error" class="error-message">{{ error }}</div>
+    <div v-if="plotImage" class="graph-container">
+      <img :src="`data:image/png;base64,${plotImage}`" alt="Survey Results Graph" />
+    </div>
+    <div v-if="message" class="info-message">{{ message }}</div>
+  </div>
+</template>
 
+<script>
 export default {
+  name: 'ResultView',
   data() {
     return {
-      pythonResult: null,
-      isLoading: true,
+      plotImage: null,
+      loading: false,
+      error: null,
+      message: null, // For messages like 'No one has answered yet'
     }
   },
-  computed: {
-    ...mapState(useSettingsStore, [
-      'fontSize',
-      'buttonColor',
-      'buttonHoverColor',
-      'resultColor',
-      'resultHoverColor',
-      'blackFont',
-      'whiteFont',
-      'data',
-    ]),
-  },
   mounted() {
-    this.executePython()
-  },
-
-  watch: {
-    // bgColor 값이 변경될 때마다 이 함수가 실행됩니다.
-    bgColor(newColor) {
-      document.body.style.backgroundColor = newColor
-    },
+    this.fetchGraph()
   },
   methods: {
-    executePython() {
-      this.isLoading = true
-      this.pythonResult = null
+    async fetchGraph() {
+      this.loading = true
+      this.error = null
+      this.plotImage = null
+      this.message = null
 
-      fetch('http://localhost:3001/run-python-file')
-        .then((response) => response.json())
-        .then((data) => {
-          this.pythonResult = data
-        })
-        .catch((error) => {
-          console.error('Error:', error)
-          this.pythonResult = { message: 'Error fetching results.' }
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
-    },
-    goToLogin() {
-      this.$emit('show-login')
+      try {
+        const response = await fetch('/api/results')
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        const data = await response.json()
+
+        if (data.plotImage) {
+          this.plotImage = data.plotImage
+        } else if (data.error) {
+          this.error = `グラフ生成失敗: ${data.error}`
+        } else if (data.message) {
+          this.message = data.message
+        }
+      } catch (e) {
+        this.error = 'Python読み込み失敗'
+        console.error(e)
+      } finally {
+        this.loading = false
+      }
     },
   },
 }
 </script>
 
-<template>
-  <div class="result-container">
-    <h2>分析結果</h2>
-    <button type="button" class="result-button" @click="goToLogin">戻る</button>
-
-    <div v-if="pythonResult && pythonResult.message" class="result-display">
-      <p>
-        <b>結果:</b><br />
-        python status : {{ pythonResult.message }} <br />
-        Time: {{ pythonResult.nowTime }} <br />
-      </p>
-
-      <div v-if="pythonResult.plotImage" class="plot-image">
-        <img :src="'data:image/png;base64,' + pythonResult.plotImage" alt="Matplotlib Plot" />
-      </div>
-    </div>
-  </div>
-</template>
-
 <style scoped>
-.result-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 32px 24px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+.result-view {
+  padding: 20px;
   text-align: center;
 }
-.plot-image img {
-  max-width: 100%;
-  height: auto;
+.graph-container {
   margin-top: 20px;
+  max-width: 100%;
+  overflow-x: auto;
 }
-.result-button {
-  background: v-bind(resultColor);
-  margin-top: 0.5em;
-  color: v-bind(whiteFont);
-  font-size: var(--font-size);
+.graph-container img {
+  max-width: none; /* Let the container handle scrolling */
+  height: auto;
 }
-.result-button:hover {
-  background: v-bind(resultHoverColor);
-  font-size: var(--font-size);
+.loading-message,
+.error-message,
+.info-message {
+  margin-top: 20px;
+  font-size: 1.2em;
 }
-button {
-  width: 100%;
-  padding: 10px 0;
-  background: #42b983;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
+.error-message {
+  color: red;
 }
-button:hover {
-  background: #369870;
-}
-
-.submit {
-  font-size: var(--font-size);
-  background: v-bind(buttonColor);
-  margin-top: 0.5em;
-}
-.submit:hover {
-  font-size: var(--font-size);
-  background: v-bind(buttonHoverColor);
+.info-message {
+  color: grey;
 }
 </style>
