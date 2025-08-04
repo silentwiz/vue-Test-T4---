@@ -25,10 +25,10 @@ try:
         sys.exit(0)
     
     # 그래프 크기를 매우 크게 설정 - 웹에서 읽기 쉽도록
-    fig, axes = plt.subplots(len(question_keys), 1, figsize=(20, len(question_keys) * 6), squeeze=False)
+    fig, axes = plt.subplots(len(question_keys), 1, figsize=(20, len(question_keys) * 9), squeeze=False)
     
-    # 서브플롯 간격 조정
-    plt.subplots_adjust(hspace=0.4)
+    # 서브플롯 간격을 매우 크게 조정
+    plt.subplots_adjust(hspace=1.2)
 
     for i, key in enumerate(question_keys):
         ax = axes[i, 0]
@@ -50,24 +50,21 @@ try:
             if answer_labels.issubset({'はい', 'いいえ'}):
                 colors = ['#0072B2' if label == 'はい' else '#D55E00' for label in counts.index]
                 
-                # 파이차트 크기와 폰트 대폭 증가
                 wedges, texts, autotexts = ax.pie(counts, labels=counts.index, autopct='%1.1f%%', 
                                                  startangle=90, colors=colors, 
                                                  textprops={'fontsize': 18},
                                                  radius=0.8)  # 파이차트 크기 증가
                 
-                # 퍼센트 텍스트 크기 증가
                 for autotext in autotexts:
                     autotext.set_fontsize(20)
                     autotext.set_fontweight('bold')
                     autotext.set_color('white')
                 
-                # 레이블 텍스트 크기 증가
                 for text in texts:
                     text.set_fontsize(18)
                     text.set_fontweight('bold')
                 
-                ax.set_title(f'{question_title}', fontsize=24, pad=40, fontweight='bold')
+                ax.set_title(f'{question_title}', fontsize=24, pad=50, fontweight='bold')
                 ax.axis('equal')
             else:
                 # 색상 팔레트
@@ -88,23 +85,18 @@ try:
                     else:
                         colors.append(other_color_map.get(label, '#BBBBBB'))
                         
-                # 바차트 생성
                 bars = ax.barh(range(len(counts)), counts.values, color=colors)
                 
-                # Y축 레이블 설정 (더 큰 폰트)
                 ax.set_yticks(range(len(counts)))
                 ax.set_yticklabels(counts.index, fontsize=16, fontweight='bold')
                 
-                # 제목과 축 레이블 설정
-                ax.set_title(f'{question_title}', fontsize=24, pad=30, fontweight='bold')
+                ax.set_title(f'{question_title}', fontsize=24, pad=40, fontweight='bold')
                 ax.set_xlabel('回答数', fontsize=18, fontweight='bold')
                 ax.tick_params(axis='x', labelsize=16)
                 
-                # 격자 설정
                 ax.grid(axis='x', linestyle='--', alpha=0.6, zorder=0)
                 ax.set_axisbelow(True)
 
-                # 데이터 레이블 추가 (더 큰 폰트)
                 for j, (bar, value) in enumerate(zip(bars, counts.values)):
                     ax.text(value + max(counts.values) * 0.01, 
                            bar.get_y() + bar.get_height() / 2, 
@@ -114,23 +106,18 @@ try:
                            fontsize=18,
                            fontweight='bold')
                 
-                # X축 범위 조정
                 ax.set_xlim(0, max(counts.values) * 1.15)
-                
-                # X축 정수로만 표시
                 ax.xaxis.set_major_locator(mticker.MaxNLocator(integer=True))
     
-    # 전체 레이아웃 조정
-    plt.tight_layout(pad=3.0)
+    plt.tight_layout(pad=6.0)
     
     buf = io.BytesIO()
-    # DPI를 150으로 설정하여 선명도와 파일 크기의 균형
     plt.savefig(buf, format='png', dpi=150, bbox_inches='tight', 
                 facecolor='white', edgecolor='none', pad_inches=0.2)
     buf.seek(0)
     image_base64 = base64.b64encode(buf.read()).decode('utf-8')
     buf.close()
-    plt.close()  # 메모리 해제
+    plt.close() 
     
     print(json.dumps({"plotImage": image_base64}))
 

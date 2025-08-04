@@ -4,12 +4,12 @@ export const useSettingsStore = defineStore('settings', {
   // state:
   state: () => ({
     fontSize: 16,
-    buttonColor: '#42b983',
-    buttonHoverColor: '#369870',
-    resultColor: '#5c6ac4',
-    resultHoverColor: '#4a55a0',
+    buttonColor: '#5AAE61',
+    buttonHoverColor: '#1B7837',
+    resultColor: '#4393C3',
+    resultHoverColor: '#2166AC',
     blackFont: '#000000',
-    whiteFont: '#fff',
+    whiteFont: '#ffffff',
     data: '',
     bgColor: '#ffffff',
   }),
@@ -31,15 +31,15 @@ export const useSettingsStore = defineStore('settings', {
         // dark mode
         this.buttonColor = '#1a1a1a'
         this.buttonHoverColor = '#7a7a7a'
-        this.resultColor = '#777777ff'
+        this.resultColor = '#777777'
         this.resultHoverColor = '#131313ff'
-        this.bgColor = '#777777ff'
+        this.bgColor = '#777777'
       } else {
         // default mode
-        this.buttonColor = '#42b983'
-        this.buttonHoverColor = '#369870'
-        this.resultColor = '#5c6ac4'
-        this.resultHoverColor = '#4a55a0'
+        this.buttonColor = '#5AAE61'
+        this.buttonHoverColor = '#1B7837'
+        this.resultColor = '#4393C3'
+        this.resultHoverColor = '#2166AC'
         this.bgColor = '#ffffff'
       }
     },

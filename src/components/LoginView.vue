@@ -63,13 +63,7 @@ export default {
       />
       <br />
       <button type="button" class="submit" @click="submitName">アンケート開始</button>
-      <button
-        type="button"
-        class="result-button"
-        @click="goToResults"
-      >
-        結果を見る
-      </button>
+      <button type="button" class="result-button" @click="goToResults">結果を見る</button>
       <br />
       <div class="font-button-group">
         <button type="button" class="font-size-changer" @click="increaseFontSize">大きく</button>
@@ -151,7 +145,7 @@ input {
 .color-changer {
   flex: 1;
   padding: 0.6em 0;
-  background: #42b983;
+  background: #5aae61;
   color: #fff;
   border: none;
   border-radius: 0.25em;
@@ -161,7 +155,7 @@ input {
 
 .color-changer:hover {
   font-size: var(--font-size);
-  background: #369870;
+  background: #1b7837;
 }
 
 .bwcolor-changer {
@@ -181,14 +175,13 @@ input {
 button {
   width: 100%;
   padding: 10px 0;
-  background: #42b983;
+  background: #5aae61;
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s;
 }
 button:hover {
-  background: #369870;
+  background: #1b7837;
 }
 </style>

@@ -30,12 +30,11 @@ export default {
       loading: false,
       error: null,
       message: null,
-      isFullscreen: false, // 전체화면 모드 상태
+      isFullscreen: false,
     }
   },
   mounted() {
     this.fetchGraph()
-    // ESC 키로 전체화면 해제
     document.addEventListener('keydown', this.handleKeydown)
   },
   beforeUnmount() {
@@ -105,7 +104,6 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s;
 }
 button:hover {
   background: #369870;
@@ -140,10 +138,9 @@ button:hover {
 .button-group button {
   width: auto;
   padding: 12px 24px;
-  font-size: 14px;
+  font-size: var(--font-size);
 }
 
-/* 일반 그래프 컨테이너 */
 .graph-container {
   margin-top: 20px;
   width: 100%;
@@ -161,13 +158,11 @@ button:hover {
   width: auto;
   height: auto;
   max-width: 100%;
-  min-width: 800px; /* 최소 너비 보장 */
+  min-width: 800px;
   cursor: pointer;
   border-radius: 8px;
-  transition: transform 0.2s ease;
 }
 
-/* 전체화면 모드 */
 .graph-container.fullscreen {
   position: fixed;
   top: 0;
@@ -193,7 +188,6 @@ button:hover {
   cursor: zoom-out;
   transform: none;
   object-fit: contain;
-  /* 원본 크기 그대로 표시하되, 너무 클 경우만 스케일 다운 */
   max-width: calc(100vw - 40px);
 }
 
@@ -201,7 +195,6 @@ button:hover {
   transform: none;
 }
 
-/* 스크롤바 스타일링 */
 .graph-container::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -221,7 +214,6 @@ button:hover {
   background: #a8a8a8;
 }
 
-/* 모바일 대응 */
 @media (max-width: 768px) {
   .button-group {
     flex-direction: column;
